@@ -1,8 +1,8 @@
 # Loan Approval Analysis — SQL Portfolio Project
 
 A SQL project analyzing 614 loan applications to understand what drives loan
-approval decisions. Built to practice data validation, joins, aggregation,
-and window functions on a realistic finance dataset.
+approval decisions. Built to practice data validation, joins, and
+aggregation on a realistic finance dataset.
 
 ## Dataset
 
@@ -15,13 +15,13 @@ Split into two normalized tables to practice joins:
 
 ## Tools
 
-SQLite3, SQL (joins, CTEs, window functions, subqueries, aggregation)
+SQLite3, SQL (joins, subqueries, aggregation, data validation)
 
 ## Files
 
 - `loan_analysis.db` — SQLite database with both tables loaded
 - `schema.sql` — table definitions
-- `queries.sql` — 11 business-question queries, in increasing order of complexity
+- `queries.sql` — 9 business-question queries, in increasing order of complexity
 - `README.md` — this file
 
 ## How to run
@@ -51,6 +51,6 @@ and run the queries in `queries.sql` individually.
 - Writing SQL from a business question, not just syntax practice
 - Table joins across normalized data
 - Aggregation with `GROUP BY` / `HAVING`
-- Window functions (`RANK() OVER`, `AVG() OVER (PARTITION BY ...)`)
+- Subqueries for comparative filtering
 - Data validation queries (duplicate checks, missing value checks) — directly
   relevant to data quality / data enablement work
