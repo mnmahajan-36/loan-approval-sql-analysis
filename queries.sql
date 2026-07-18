@@ -1,5 +1,4 @@
 /*
-==========================================================================
 LOAN APPROVAL ANALYSIS - SQL PORTFOLIO PROJECT
 Database: loan_analysis.db (SQLite)
 Tables:
@@ -9,8 +8,7 @@ Tables:
 
 Each query below answers a specific business question, in increasing
 order of complexity: basic filtering -> aggregation -> joins ->
-subqueries -> window functions / CTEs.
-==========================================================================
+subqueries
 */
 
 -- 1. BASIC FILTER
@@ -91,41 +89,7 @@ FROM loans l
 GROUP BY l.Credit_History;
 
 
--- 8. CTE + WINDOW FUNCTION
--- Q: Rank property areas by average loan amount, and show each area's
---    rank alongside its approval rate.
-WITH area_stats AS (
-    SELECT
-        a.Property_Area,
-        ROUND(AVG(l.LoanAmount), 1) AS avg_loan_amount,
-        ROUND(100.0 * SUM(CASE WHEN l.Loan_Status = 'Y' THEN 1 ELSE 0 END) / COUNT(*), 1) AS approval_rate_pct
-    FROM applicants a
-    JOIN loans l ON a.Loan_ID = l.Loan_ID
-    GROUP BY a.Property_Area
-)
-SELECT
-    Property_Area,
-    avg_loan_amount,
-    approval_rate_pct,
-    RANK() OVER (ORDER BY avg_loan_amount DESC) AS loan_amount_rank
-FROM area_stats;
-
-
--- 9. WINDOW FUNCTION (income percentile per group)
--- Q: For each education level, show every applicant's income alongside
---    that group's average income, to spot who's above/below their peers.
-SELECT
-    a.Loan_ID,
-    a.Education,
-    a.ApplicantIncome,
-    ROUND(AVG(a.ApplicantIncome) OVER (PARTITION BY a.Education), 0) AS avg_income_in_group,
-    a.ApplicantIncome - ROUND(AVG(a.ApplicantIncome) OVER (PARTITION BY a.Education), 0) AS diff_from_group_avg
-FROM applicants a
-ORDER BY a.Education, diff_from_group_avg DESC
-LIMIT 20;
-
-
--- 10. DATA QUALITY CHECK (validation-style query - relevant to a
+-- 8. DATA QUALITY CHECK (validation-style query - relevant to a
 --     data-enablement/trainee role: finding missing/incomplete records)
 -- Q: How many records have missing values in key fields?
 SELECT
@@ -137,7 +101,7 @@ FROM applicants a
 JOIN loans l ON a.Loan_ID = l.Loan_ID;
 
 
--- 11. DUPLICATE CHECK (data validation - another data-enablement-relevant query)
+-- 9. DUPLICATE CHECK (data validation - another data-enablement-relevant query)
 -- Q: Confirm there are no duplicate Loan_IDs in either table.
 SELECT Loan_ID, COUNT(*) AS occurrences
 FROM applicants
